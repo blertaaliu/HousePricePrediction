@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+{% load static %}
+<body class="bg-center bg-cover backdrop-blur bg-[url('/static/predict.jpg')]">
+    <nav class="bg-[#080A45] py-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a href="{% url 'home' %}" class="text-white text-2xl font-bold">HouPRED</a>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex-grow text-center">
+                <ul class="flex justify-center space-x-4">
+                    <li><a href="#" class="text-white hover:text-gray-400">Home</a></li>
+                    <li><a href="#" class="text-white hover:text-gray-400">How it Works</a></li>
+                    <li><a href="#" class="text-white hover:text-gray-400">Predict</a></li>
+                    <li><a href="#" class="text-white hover:text-gray-400">About Us</a></li>
+                    <li><a href="#" class="text-white hover:text-gray-400">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Login and Register Buttons -->
+            <div>
+                <a href="#" class="text-white mr-4 hover:text-gray-400">Login</a>
+                <a href="#" class="bg-[#6466A8] hover:bg-blue-600 text-white px-4 py-2 rounded">Register</a>
+            </div>
+        </div>
+    </nav>
+
+  <!-- Prediction Section -->
+  {% load static %}
+  <section id="prediction" class="relative py-16 px-4 bg-center bg-cover backdrop-blur bg-[url('/static/predict.jpg')]">
+     <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur"></div>
+     <div class="relative container mx-auto text-center">
+         <h2 class="text-3xl font-semibold mb-4">Ready to Predict House Prices?</h2>
+         <p class="text-white">Get started now to predict house prices accurately!</p>
+     </div>
+
+     <div class="relative flex flex-col items-center justify-center py-10 lg:py-12">
+        <form action="{% url 'predict' %}" method="post" class="w-full lg:max-w-[960px] bg-white p-8 rounded-lg shadow-md" onsubmit="return validateForm() && saveFormValues()">
+            <h1 class="text-3xl font-bold mb-4">Please enter the following values:</h1>
+            {% csrf_token %}
+            
+            <!-- Model Type Select -->
+            <!-- <div class="mb-4">
+                <label for="model_type" class="block text-lg font-semibold mb-2">Select Prediction Model</label>
+                <select name="model_type" id="model_type" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                    <option value="" disabled selected>Select a model</option>
+                    <option value="linear">Linear Regression</option>
+                    <option value="decision_tree">Decision Tree</option>
+                    <option value="random_forest">Random Forest</option>
+                </select>
+            </div> -->
+        
+            <!-- Other Input Fields -->
+            <div class="mb-4">
+                <label for="n1" class="block text-lg font-semibold mb-2">Avg. Area Income</label>
+                <input type="text" name="n1" id="n1" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+            </div>
+            <div class="mb-4">
+                <label for="n2" class="block text-lg font-semibold mb-2">Avg. House Age</label>
+                <input type="text" name="n2" id="n2" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+            </div>
+            <div class="mb-4">
+                <label for="n3" class="block text-lg font-semibold mb-2">Avg. Area Number of Rooms</label>
+                <input type="text" name="n3" id="n3" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+            </div>
+            <div class="mb-4">
+                <label for="n4" class="block text-lg font-semibold mb-2">Avg. Area Number of Bedrooms</label>
+                <input type="text" name="n4" id="n4" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+            </div>
+            <div class="mb-4">
+                <label for="n5" class="block text-lg font-semibold mb-2">Avg. Area Population</label>
+                <input type="text" name="n5" id="n5" class="w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+            </div>
+        
+            <div class="text-center">
+                <input type="submit" value="PREDICT" class="bg-[#080A45] hover:bg-[#6466A8] text-white px-6 py-3 rounded-lg font-semibold shadow-md focus:outline-none focus:bg-blue-600">
+                <button type="button" onclick="clearFormValues()" class="ml-4 bg-gray-500 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md focus:outline-none">CLEAR</button>
+            </div>
+        
+            <div class="mt-8" id="result">
+                <h2 class="text-2xl font-semibold">{{ result2 }}</h2>
+            </div>
+        </form>        
+     </div>
+ </section>
+<footer class="text-white bg-[#080A45] py-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-semibold">House Price Prediction</h2>
+                <p class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+            <div>
+                <ul class="flex space-x-4">
+                    <li><a href="#" class="hover:text-gray-400">Home</a></li>
+                    <li><a href="#" class="hover:text-gray-400">How it Works</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Predict</a></li>
+                    <li><a href="#" class="hover:text-gray-400">About Us</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-600 mt-4 pt-4 text-center">
+            <p>&copy; 2024 House Price Prediction. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+
+    function validateForm() {
+        var n1 = document.getElementById('n1').value;
+        var n2 = document.getElementById('n2').value;
+        var n3 = document.getElementById('n3').value;
+        var n4 = document.getElementById('n4').value;
+        var n5 = document.getElementById('n5').value;
+
+        if (n1 === '' || n2 === '' || n3 === '' || n4 === '' || n5 === '') {
+            alert('Please fill in all fields.');
+            return false;
+        }
+
+        if (isNaN(n1) || isNaN(n2) || isNaN(n3) || isNaN(n4) || isNaN(n5)) {
+            alert('Please enter valid numbers.');
+            return false;
+        }
+
+        return true;
+    }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = ['n1', 'n2', 'n3', 'n4', 'n5'];
+            inputs.forEach(input => {
+                const value = localStorage.getItem(input);
+                if (value) {
+                    document.getElementById(input).value = value;
+                }
+            });
+        });
+
+        function saveFormValues() {
+            const inputs = ['n1', 'n2', 'n3', 'n4', 'n5'];
+            inputs.forEach(input => {
+                const value = document.getElementById(input).value;
+                localStorage.setItem(input, value);
+            });
+        }
+
+        function clearFormValues() {
+            const inputs = ['n1', 'n2', 'n3', 'n4', 'n5'];
+            inputs.forEach(input => {
+                document.getElementById(input).value = '';
+                localStorage.removeItem(input);
+            });
+            
+            clearResult();
+        }
+
+        function clearResult() {
+            document.getElementById('result').innerText = '';
+        }
+    </script>
+</body>
+</html>
